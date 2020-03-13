@@ -1,0 +1,89 @@
+openapi: 3.0.0
+info:
+  description: An API to facilitate client device enrollment with WireGuard VPN
+  version: "1.0.0"
+  title: wg-api
+  contact:
+    email: nvissari@hcpss.org
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+security:
+  - api_key: []
+paths:
+  /api/v1/devices/{hostname}/config:
+    post:
+      summary: Replace student id number
+      description: Replace student id number on a single account, no need to check if the account exists first.
+      parameters:
+        - name: hostname
+          in: path
+          description: The device hostname
+          required: true
+          style: simple
+          explode: false,
+          schema:
+            type: string
+            example: "nick-desktop"
+      requestBody:
+        description: Client generated shared secret
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                key:
+                  type: string
+                  example: m0akoqv43ybi4jf0fpsg13du33vcnm66
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  succeeded:
+                    type: boolean
+                    example: true
+                  config:
+                    type: string
+                    example: |
+                      [Interface]
+                      Address = 192.168.8.10/24
+                      PrivateKey = somethingsecret
+                      ListenPort = 51820
+
+                      [Peer]
+                      PublicKey = sZ9CyTvzsE502XPYBZaUuahrh043TUTt57+wzEYPZH4=
+                      AllowedIPs = 192.168.8.1/24
+                      Endpoint = wg.example.com:51820
+                      PersistentKeepalive = 25
+        400:
+          description: bad request
+          content:
+            application/json:
+              schema:
+                type: string
+                example: bad request
+        401:
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                type: string
+                example: invalid token
+        500:
+          description: error
+          content:
+            application/json:
+              schema:
+                type: string
+                example: some error
+components:
+  securitySchemes:
+    api_key:
+      type: http
+      scheme: bearer
+      bearerFormat: psk
