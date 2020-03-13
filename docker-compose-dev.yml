@@ -6,6 +6,11 @@ services:
     user: node
     working_dir: /home/node/app
     command: nodemon
+    environment:
+      WG_IP: 10.99.0.1
+      WG_POOL: 10.99.0.0/16
+      WG_PORT: 53
+      WG_ENDPOINT: wg.hcpss.org
     ports:
       - target: 9000
         published: 9000
