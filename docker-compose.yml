@@ -1,0 +1,21 @@
+version: '3.5'
+services:
+  api:
+    image: reg.hcpss.org/wg/api:1.0
+    build: ./api/
+    user: node
+    working_dir: /home/node/app
+    command: bash -c 'while true; do npm start; done'
+    ports:
+      - target: 9000
+        published: 8853
+        mode: host
+    secrets:
+      - wg_api_key
+    volumes:
+      - data:/data
+volumes:
+  data: {}
+secrets:
+  wg_api_key:
+    external: true
