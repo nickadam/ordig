@@ -1,0 +1,26 @@
+version: '3.5'
+services:
+  api:
+    image: wg-api:dev
+    build: ./api/
+    user: node
+    working_dir: /home/node/app
+    command: nodemon
+    ports:
+      - target: 9000
+        published: 9000
+        mode: host
+    secrets:
+      - wg_api_key
+    volumes:
+      - type: bind
+        source: ./api
+        target: /home/node/app
+      - type: volume
+        source: data
+        target: /data
+volumes:
+  data: {}
+secrets:
+  wg_api_key:
+    external: true
