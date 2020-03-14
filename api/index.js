@@ -101,7 +101,19 @@ init_server(db, (err, server_keypair) => {
         if(err){console.error(err)}
         res.status(500).send('Failed to get device config')
       }else{
-        res.send(config)
+        res.send({
+          succeeded: true,
+          config: `[Interface]
+Address = ${config.ip}/${wg_pool.split('/')[1]}
+PrivateKey = ${JSON.parse(config.keypair).private_key}
+
+[Peer]
+PublicKey = ${server_keypair.public_key}
+Endpoint = ${wg_endpoint}:${wg_port}
+AllowedIPs = ${wg_allowed}
+PersistentKeepalive = 25
+`
+        })
       }
     })
   })
