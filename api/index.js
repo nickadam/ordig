@@ -25,7 +25,7 @@ app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 // require API keys
 const server_url_re = /^\/api\/v[0-9]\/server/
-const client_url_re = /^\/api\/v[0-9]\/client/
+const client_url_re = /^\/api\/v[0-9]\/(client|devices)/
 app.use((req, res, next) => {
   if(server_url_re.test(req.path)){
     if(req.get('Authorization')){
@@ -59,6 +59,8 @@ app.use((req, res, next) => {
     }else{
       res.status(401).send('invalid token')
     }
+  }else{
+    res.status(400).send('bad request')
   }
 })
 
@@ -71,7 +73,7 @@ init_server(db, (err, server_keypair) => {
   }
 
   // send server config
-  app.use('/api/v1/server/config', (req, res) => {
+  app.get('/api/v1/server/config', (req, res) => {
     res.send({
       ip: wg_ip,
       port: wg_port,
@@ -80,12 +82,22 @@ init_server(db, (err, server_keypair) => {
   })
 
   // test client
-  app.use('/api/v1/client', (req, res) => {
+  app.get('/api/v1/client', (req, res) => {
     res.send({
       wg_endpoint: wg_endpoint,
       wg_port: wg_port,
       wg_allowed: wg_allowed,
       public_key: server_keypair.public_key
+    })
+  })
+
+  // generate and get device config
+  app.post('/api/v1/devices/:hostname/config', (req, res) => {
+    const hostname = req.params.hostname
+    const key = req.body.key
+    res.send({
+      hostname: hostname,
+      key: key
     })
   })
 })
