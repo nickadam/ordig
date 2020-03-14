@@ -47,6 +47,15 @@ paths:
                   succeeded:
                     type: boolean
                     example: true
+                  name:
+                    type: string
+                    example: wg0
+                  namespace:
+                    type: string
+                    example: example.com
+                  nameserver:
+                    type: string
+                    example: "10.10.10.10"
                   config:
                     type: string
                     example: |
