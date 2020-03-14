@@ -5,6 +5,7 @@ const sqlite3 = require('sqlite3').verbose()
 const swaggerUi = require('swagger-ui-express')
 const init_server = require('./init_server')
 const get_device_config = require('./get_device_config')
+const get_all_device_configs = require('./get_all_device_configs')
 const YAML = require('yamljs')
 const swaggerDocument = YAML.load('./openapi.yml')
 const db = new sqlite3.Database('/data/wg.sqlite3')
@@ -114,6 +115,18 @@ AllowedIPs = ${wg_allowed}
 PersistentKeepalive = 25
 `
         })
+      }
+    })
+  })
+
+  // get all device configs for server
+  app.get('/api/v1/server/devices', (req, res) => {
+    get_all_device_configs(db, (err, configs) => {
+      if(err || !configs){
+        if(err){console.error(err)}
+        res.status(500).send('Failed to get device configs')
+      }else{
+        res.send(configs)
       }
     })
   })

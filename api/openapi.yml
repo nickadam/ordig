@@ -13,8 +13,8 @@ security:
 paths:
   /api/v1/devices/{hostname}/config:
     post:
-      summary: Replace student id number
-      description: Replace student id number on a single account, no need to check if the account exists first.
+      summary: Get client device config
+      description: Client can get it's own device config using shared secrets
       parameters:
         - name: hostname
           in: path
@@ -60,6 +60,53 @@ paths:
                       AllowedIPs = 192.168.8.1/24
                       Endpoint = wg.example.com:51820
                       PersistentKeepalive = 25
+        400:
+          description: bad request
+          content:
+            application/json:
+              schema:
+                type: string
+                example: bad request
+        401:
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                type: string
+                example: invalid token
+        500:
+          description: error
+          content:
+            application/json:
+              schema:
+                type: string
+                example: some error
+  /api/v1/server/devices:
+    get:
+      summary: Get all device configs
+      description: The server gets a list of all the client configs
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  succeeded:
+                    type: boolean
+                    example: true
+                  configs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        ip:
+                          type: string
+                          example: '192.168.0.2'
+                        public_key:
+                          type: string
+                          example: 'nIxqi6pp9CMEINeJOFOA31mEajKKkzMZC9DOin52pGs='
         400:
           description: bad request
           content:
