@@ -10,8 +10,10 @@ services:
       WG_NAME: hc0
       WG_IP: 10.99.0.1
       WG_POOL: 10.99.0.0/16
+      WG_NAMESPACE: hcpss.org
+      WG_NAMESERVER: 10.221.10.242
       WG_PORT: 53
-      WG_ENDPOINT: wg.hcpss.org
+      WG_ENDPOINT: 38.101.39.10
     ports:
       - target: 9000
         published: 8853
