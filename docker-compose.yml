@@ -7,6 +7,7 @@ services:
     working_dir: /home/node/app
     command: bash -c 'while true; do npm start; done'
     environment:
+      WG_NAME: hc0
       WG_IP: 10.99.0.1
       WG_POOL: 10.99.0.0/16
       WG_PORT: 53

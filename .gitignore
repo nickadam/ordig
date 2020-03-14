@@ -1,4 +1,6 @@
 # Logs
+config.json
+.privatekey
 logs
 *.log
 npm-debug.log*

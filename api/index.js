@@ -10,6 +10,7 @@ const YAML = require('yamljs')
 const swaggerDocument = YAML.load('./openapi.yml')
 const db = new sqlite3.Database('/data/wg.sqlite3')
 
+const wg_name = process.env.WG_NAME || 'wg0'
 const wg_pool = process.env.WG_POOL || '10.10.10.0/24'
 const wg_ip = process.env.WG_IP || '10.10.10.1'
 const wg_endpoint = process.env.WG_ENDPOINT || 'wg.example.com'
@@ -77,7 +78,8 @@ init_server(db, (err, server_keypair) => {
   // send server config
   app.get('/api/v1/server/config', (req, res) => {
     res.send({
-      ip: wg_ip,
+      name: wg_name,
+      ip: wg_ip + '/' + wg_pool.split('/')[1],
       port: wg_port,
       private_key: server_keypair.private_key
     })
