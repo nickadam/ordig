@@ -17,10 +17,13 @@ services:
         mode: host
     secrets:
       - wg_api_key
+      - wg_client_api_key
     volumes:
       - data:/data
 volumes:
   data: {}
 secrets:
   wg_api_key:
+    external: true
+  wg_client_api_key:
     external: true
