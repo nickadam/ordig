@@ -41,6 +41,12 @@ if o.returncode != 0:
     if o.returncode != 0:
         print('Failed to set listener and key on wireguard link: ' + o.stderr)
         sys.exit(1)
+    # bring interface up
+    cmd = ['ip', 'link', 'set', 'up', 'dev', server_config['name']]
+    o = subprocess.run(cmd, encoding='utf-8', stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if o.returncode != 0:
+        print('Failed to set wireguard link up: ' + o.stderr)
+        sys.exit(1)
 
 # start infinite loop of getting client configs and setting them on the server
 while True:
