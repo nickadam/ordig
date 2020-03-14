@@ -4,7 +4,8 @@
   "description": "An API to facilitate client device enrollment with WireGuard VPN",
   "main": "index.js",
   "scripts": {
-    "test": "node test.js"
+    "test": "node test.js",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
