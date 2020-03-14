@@ -96,8 +96,9 @@ init_server(db, (err, server_keypair) => {
   app.post('/api/v1/devices/:hostname/config', (req, res) => {
     const hostname = req.params.hostname
     const key = req.body.key
-    get_device_config(hostname, key, (err, config) => {
+    get_device_config(hostname, key, db, wg_pool, (err, config) => {
       if(err || !config){
+        if(err){console.error(err)}
         res.status(500).send('Failed to get device config')
       }else{
         res.send(config)
