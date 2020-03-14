@@ -23,6 +23,10 @@ services:
       - wg_client_api_key
     volumes:
       - data:/data
+    deploy:
+      mode: global
+      placement:
+        constraints: [node.labels.wg_api == true]
 volumes:
   data: {}
 secrets:
