@@ -59,6 +59,6 @@ if($r.StatusCode -eq 200){
 
   # Add a proxy DNS for domain
   if(-not (Get-DnsClientNrptRule | Where{$_.NameServer -eq $Config.nameserver})){
-    Add-DnsClientNrptRule -Namespace $Config.namespace -NameServers $Config.nameserver
+    Add-DnsClientNrptRule -Namespace ('.' + $Config.namespace) -NameServers $Config.nameserver
   }
 }
