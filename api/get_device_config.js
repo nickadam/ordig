@@ -1,8 +1,9 @@
 'use strict'
+const generate_keypair = require('./generate_keypair')
 
 // get device config from database
 const get_device_config = (hostname, key, db, next) => {
-  db.get('SELECT * FROM clients WHERE hostname = ? AND key = ?', (err, row) => {
+  db.get('SELECT * FROM clients WHERE hostname = ? AND key = ?', hostname, key, (err, row) => {
     if(err){
       next(err)
     }else{
@@ -29,11 +30,18 @@ const get_next_ip = (pool, db, next) => {
     if(err){
       next(err)
     }else if(row){ // this IP plus 1
-      console.log(row)
-      next()
+      next(null, add_ipv4_cidr(row.ip, net_bits, 1))
     }else{ // second IP in pool, 1 is reserved for server
       next(null, add_ipv4_cidr(net, net_bits, 2))
     }
+  })
+}
+
+const set_device_config = (hostname, ip, key, keypair, db, next) => {
+  const stmt = db.prepare('INSERT INTO clients (hostname, ip, key, keypair) VALUES (?, ?, ?, ?)')
+  stmt.run(hostname, ip, key, JSON.stringify(keypair))
+  stmt.finalize(() => {
+    next(null, true)
   })
 }
 
@@ -47,8 +55,16 @@ module.exports = (hostname, key, db, pool, next) => {
     }else{
       // generate config, write to db, send it
       get_next_ip(pool, db, (err, ip) => {
-        console.log(ip)
-        next()
+        const keypair = generate_keypair()
+        set_device_config(hostname, ip, key, keypair, db, () => {
+          get_device_config(hostname, key, db, (err, config) => {
+            if(err || !config){
+              next(err)
+            }else{
+              next(null, config)
+            }
+          })
+        })
       })
     }
   })

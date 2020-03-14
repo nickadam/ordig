@@ -6,7 +6,7 @@ module.exports = (db, next) => {
     // create tables
     db.run('CREATE TABLE IF NOT EXISTS server (keypair TEXT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)')
     db.run('CREATE TABLE IF NOT EXISTS networks (ip TEXT KEY, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)')
-    db.run('CREATE TABLE IF NOT EXISTS clients (hostname TEXT KEY, ip TEXT KEY, key TEXT, keypair TEXT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)')
+    db.run('CREATE TABLE IF NOT EXISTS clients (hostname TEXT KEY, ip TEXT, key TEXT, keypair TEXT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)')
     db.get('SELECT * FROM server', (err, row) => {
       if(err){
         next(err)
