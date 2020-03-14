@@ -1,4 +1,4 @@
-$WG_URL = "http://battery.hcpss.org:9000"
+$WG_URL = "https://wgapi.hcpss.org"
 $WG_KEY = ""
 $HEADER = @{"Authorization"="Bearer "+ $WG_KEY}
 $FolderPath = "C:\ProgramData\WireGuard"
