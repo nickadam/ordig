@@ -4,6 +4,7 @@ const express = require('express')
 const sqlite3 = require('sqlite3').verbose()
 const swaggerUi = require('swagger-ui-express')
 const init_server = require('./init_server')
+const get_device_config = require('./get_device_config')
 const YAML = require('yamljs')
 const swaggerDocument = YAML.load('./openapi.yml')
 const db = new sqlite3.Database('/data/wg.sqlite3')
@@ -95,9 +96,12 @@ init_server(db, (err, server_keypair) => {
   app.post('/api/v1/devices/:hostname/config', (req, res) => {
     const hostname = req.params.hostname
     const key = req.body.key
-    res.send({
-      hostname: hostname,
-      key: key
+    get_device_config(hostname, key, (err, config) => {
+      if(err || !config){
+        res.status(500).send('Failed to get device config')
+      }else{
+        res.send(config)
+      }
     })
   })
 })
