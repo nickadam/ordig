@@ -38,9 +38,9 @@ services:
     volumes:
       - type: bind
         source: ./Caddyfile
-        target: /etc/Caddyfile
+        target: /etc/caddy/Caddyfile
       - type: bind
         source: ./public
-        target: /www/public
+        target: /var/www/html/public
 volumes:
   data: {}
