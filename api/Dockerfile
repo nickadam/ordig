@@ -7,7 +7,7 @@ RUN echo "deb http://deb.debian.org/debian/ unstable main" > /etc/apt/sources.li
 
 FROM node:13
 
-LABEL maintainer="Nick Vissari <nvissari@hcpss.org>"
+LABEL maintainer="@nickadam"
 
 ENV TZ America/New_York
 

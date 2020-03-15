@@ -2,9 +2,7 @@ openapi: 3.0.0
 info:
   description: An API to facilitate client device enrollment with WireGuard VPN
   version: "1.0.0"
-  title: wg-api
-  contact:
-    email: nvissari@hcpss.org
+  title: ordig-api
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT

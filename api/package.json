@@ -1,5 +1,5 @@
 {
-  "name": "wg-api",
+  "name": "ordig-api",
   "version": "1.0.0",
   "description": "An API to facilitate client device enrollment with WireGuard VPN",
   "main": "index.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nickadam/wg-api.git"
+    "url": "git+https://github.com/nickadam/ordig.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nickadam/wg-api/issues"
+    "url": "https://github.com/nickadam/ordig/issues"
   },
-  "homepage": "https://github.com/nickadam/wg-api#readme",
+  "homepage": "https://github.com/nickadam/ordig#readme",
   "dependencies": {
     "express": "^4.17.1",
     "sqlite3": "^4.1.1",

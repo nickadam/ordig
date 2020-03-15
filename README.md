@@ -1,2 +1,2 @@
-# wg-api
-An API to facilitate client device enrollment with WireGuard VPN
+# ordig
+Automatic WireGuard VPN for Windows
