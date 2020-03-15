@@ -43,9 +43,25 @@ then
 fi
 
 # git should be installed
-sudo apt-get install -y git
+apt-get install -y git python3-pip
+
+# install jinja2-cli
+pip3 install jinja2-cli
 
 # clone ordig
-mkdir /opt/ordig
-cd /opt/ordig
+cd /opt
 git clone https://github.com/nickadam/ordig.git
+
+echo '
+{
+  "WG_NAME": "'"${WG_NAME}"'",
+  "WG_IP": "'"${WG_IP}"'",
+  "WG_POOL": "'"${WG_POOL}"'",
+  "WG_NAMESPACE": "'"${WG_NAMESPACE}"'",
+  "WG_NAMESERVER": "'"${WG_NAMESERVER}"'",
+  "WG_PORT": "'"${WG_PORT}"'",
+  "WG_ENDPOINT": "'"${WG_ENDPOINT}"'",
+  "WG_SERVER_API_KEY": "'"${WG_SERVER_API_KEY}"'",
+  "WG_CLIENT_API_KEY": "'"${WG_CLIENT_API_KEY}"'"
+}
+' | jinja2 docker-compose-template.yml > docker-compose.yml
