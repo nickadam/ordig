@@ -14,7 +14,7 @@ do
   sleep 5
 done
 
-nohup ./wg_server.sh &
+nohup ./wg_server.sh >/dev/null &
 
 echo ""
 echo ""
