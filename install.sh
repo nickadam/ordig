@@ -67,7 +67,10 @@ fi
 apt-get install -y git python3-pip
 
 # install jinja2-cli
-pip3 install jinja2-cli
+if ! which jinja2
+then
+  pip3 install jinja2-cli
+fi
 
 # clone ordig
 cd /opt
