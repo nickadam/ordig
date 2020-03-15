@@ -1,5 +1,5 @@
-$WG_URL = "{{WG_URL}}"
-$WG_KEY = "{{WG_KEY}}"
+$WG_URL = "https://{{WG_ENDPOINT}}"
+$WG_KEY = "{{WG_CLIENT_API_KEY}}"
 $HEADER = @{"Authorization"="Bearer "+ $WG_KEY}
 $FolderPath = "C:\ProgramData\WireGuard"
 
@@ -33,7 +33,7 @@ $config_key = (Get-Content ($FolderPath + "\config_key")).toString()
 
 # check if wg is installed
 if(-not (Test-Path "C:\Program Files\WireGuard\wireguard.exe")){
-  (New-Object System.Net.WebClient).DownloadFile("{{WG_PUBLIC}}/wireguard-amd64-0.0.38.msi", ($FolderPath + "\wireguard-amd64-0.0.38.msi"))
+  (New-Object System.Net.WebClient).DownloadFile("https://{{WG_ENDPOINT}}/public/wireguard-amd64-0.0.38.msi", ($FolderPath + "\wireguard-amd64-0.0.38.msi"))
   & ($FolderPath + "\wireguard-amd64-0.0.38.msi") /quiet /qn /log ($FolderPath + "\wireguard-amd64-0.0.38.log")
   Start-Sleep 30
 }
@@ -62,7 +62,7 @@ if($r.StatusCode -eq 200){
 
   # Get nssm
   if(-not (Test-Path ($FolderPath + "\nssm.exe"))){
-    (New-Object System.Net.WebClient).DownloadFile("{{WG_PUBLIC}}/nssm.exe", ($FolderPath + "\nssm.exe"))
+    (New-Object System.Net.WebClient).DownloadFile("https://{{WG_ENDPOINT}}/public/nssm.exe", ($FolderPath + "\nssm.exe"))
   }
 
   # Write watcher ps1

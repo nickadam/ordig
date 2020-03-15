@@ -1,0 +1,4 @@
+{
+  "api_url": "https://{{WG_ENDPOINT}}",
+  "api_key": "{{WG_SERVER_API_KEY}}"
+}
