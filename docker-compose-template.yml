@@ -2,7 +2,6 @@ version: '3.5'
 services:
   api:
     image: nickadam/ordig:1.0
-    build: ./api/
     user: node
     working_dir: /home/node/app
     command: bash -c 'while true; do npm start; done'
