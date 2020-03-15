@@ -96,3 +96,6 @@ jinja2 windows_client/wg-template.ps1 config.json > wg.ps1
 
 # create server config
 jinja2 server/config-template.json config.json > server/config.json
+
+# create Caddyfile
+jinja2 Caddyfile-template config.json > Caddyfile
