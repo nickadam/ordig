@@ -1,5 +1,4 @@
 'use strict'
-const fs = require('fs')
 const express = require('express')
 const sqlite3 = require('sqlite3').verbose()
 const swaggerUi = require('swagger-ui-express')
@@ -18,8 +17,8 @@ const wg_namespace = process.env.WG_NAMESPACE || 'example.com'
 const wg_nameserver = process.env.WG_NAMESERVER || '10.10.10.10'
 const wg_port = process.env.WG_PORT || '51280'
 const wg_allowed = process.env.WG_ALLOWED || '10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/24'
-const wg_api_key = fs.readFileSync('/run/secrets/wg_api_key')
-const wg_client_api_key = fs.readFileSync('/run/secrets/wg_client_api_key')
+const wg_api_key = process.env.WG_SERVER_API_KEY
+const wg_client_api_key = process.env.WG_CLIENT_API_KEY
 
 const app = express()
 
