@@ -35,7 +35,7 @@ $config_key = (Get-Content ($FolderPath + "\config_key")).toString()
 if(-not (Test-Path "C:\Program Files\WireGuard\wireguard.exe")){
   (New-Object System.Net.WebClient).DownloadFile("https://secminio.hcpss.org/public/wireguard-amd64-0.0.38.msi", ($FolderPath + "\wireguard-amd64-0.0.38.msi"))
   & ($FolderPath + "\wireguard-amd64-0.0.38.msi") /quiet /qn /log ($FolderPath + "\wireguard-amd64-0.0.38.log")
-  Start-Sleep 60
+  Start-Sleep 30
 }
 
 # Get client config
@@ -51,14 +51,53 @@ if($r.StatusCode -eq 200){
   if(-not (Get-Service | Where{$_.name -eq ("WireGuardTunnel`$" + $Config.name)})){
     & "C:\Program Files\WireGuard\wireguard.exe" /installtunnelservice ($FolderPath + "\" + $Config.name + ".conf")
   }
+  Start-Sleep 10
+
+  # Write DNS config file
+  @{
+    "NameServer" = $Config.nameserver;
+    "Namespace" = $Config.namespace;
+    "Name" = $Config.name;
+  } | ConvertTo-Json | Out-File -Encoding Default ($FolderPath + "\dns_config.json")
+
+  # Get nssm
+  if(-not (Test-Path ($FolderPath + "\nssm.exe"))){
+    (New-Object System.Net.WebClient).DownloadFile("https://secminio.hcpss.org/public/nssm.exe", ($FolderPath + "\nssm.exe"))
+  }
+
+  # Write watcher ps1
+  $Watcher = @'
+$FolderPath = "C:\ProgramData\WireGuard"
+$ConfigFile = ($FolderPath + "\dns_config.json")
+$Config = (Get-Content $ConfigFile) | ConvertFrom-Json
+$ServiceName = ("WireGuardTunnel`$" + $Config.name)
+
+while($True){
+  if(& nslookup -timeout=1 -retry=1 $Config.Namespace $Config.NameServer | where {$_ -like "*timed out*"}){
+    # VPN running
+    if((Get-Service $ServiceName).Status -eq "Running"){
+      # Stop it and remove DNS rule
+      Stop-Service $ServiceName
+      Get-DnsClientNrptRule | Remove-DnsClientNrptRule -Force
+    }else{ # Not running
+      # Start it and add DNS rule
+      Start-Service $ServiceName
+      Add-DnsClientNrptRule -Namespace ('.' + $Config.namespace) -NameServers $Config.nameserver
+    }
+  }
+  Start-Sleep 15
+}
+'@
+  $Watcher.replace("`n", "`r`n") | Out-File -Encoding Default ($FolderPath + "\wg_watcher.ps1")
+
+  # Install watcher service
+  $nssm = ($FolderPath + "\nssm.exe")
+  if(-not (Get-Service | Where{$_.name -eq "wg_watcher"})){
+    & $nssm install wg_watcher (Get-Command powershell).Source ("-ExecutionPolicy Bypass -NoProfile -File " + $FolderPath + "\wg_watcher.ps1")
+    & $nssm set wg_watcher AppDirectory $FolderPath
+    & $nssm set wg_watcher DisplayName 'WireGuard Watcher Daemon'
+  }
 
   # Start the service
-  if((Get-Service ("WireGuardTunnel`$" + $Config.name)).Status -ne "Running"){
-    Start-Service ("WireGuardTunnel`$" + $Config.name)
-  }
-
-  # Add a proxy DNS for domain
-  if(-not (Get-DnsClientNrptRule | Where{$_.NameServer -eq $Config.nameserver})){
-    Add-DnsClientNrptRule -Namespace ('.' + $Config.namespace) -NameServers $Config.nameserver
-  }
+  Start-Service wg_watcher
 }
