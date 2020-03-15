@@ -23,6 +23,9 @@ WG_NAMESPACE=${i:=example.local}
 echo -n "DNS server to use for internal traffic [10.10.10.10]: "
 read i
 WG_NAMESERVER=${i:=10.10.10.10}
+echo -n "Networks use for internal traffic [10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16]: "
+read i
+WG_ALLOWED=${i:=10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16}
 echo -n "UDP port clients will connect to [51820]: "
 read i
 WG_PORT=${i:=51820}
@@ -86,6 +89,7 @@ echo '{
   "WG_NAMESERVER": "'"${WG_NAMESERVER}"'",
   "WG_PORT": "'"${WG_PORT}"'",
   "WG_ENDPOINT": "'"${WG_ENDPOINT}"'",
+  "WG_ALLOWED": "'"${WG_ALLOWED}"'",
   "WG_SERVER_API_KEY": "'"${WG_SERVER_API_KEY}"'",
   "WG_CLIENT_API_KEY": "'"${WG_CLIENT_API_KEY}"'"
 }' > config.json
