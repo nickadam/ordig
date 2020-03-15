@@ -42,5 +42,9 @@ services:
       - type: bind
         source: ./public
         target: /var/www/html/public
+      - type: volume
+        source: caddy
+        target: /data
 volumes:
   data: {}
+  caddy: {}
