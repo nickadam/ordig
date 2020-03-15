@@ -76,9 +76,12 @@ then
 fi
 
 # clone ordig
-cd /opt
-git clone https://github.com/nickadam/ordig.git
-cd ordig
+if [ ! -d /opt/ordig ]
+then
+  cd /opt
+  git clone https://github.com/nickadam/ordig.git
+fi
+cd /opt/ordig
 
 # create docker-compose
 echo '{
