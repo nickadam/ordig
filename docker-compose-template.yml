@@ -25,7 +25,7 @@ services:
         source: data
         target: /data
   proxy:
-    image: abiosoft/caddy
+    image: caddy/caddy
     ports:
       - target: 80
         published: 80
