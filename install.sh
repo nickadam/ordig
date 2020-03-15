@@ -106,3 +106,9 @@ jinja2 server/config-template.json config.json > server/config.json
 
 # create Caddyfile
 jinja2 Caddyfile-template config.json > Caddyfile
+
+echo ""
+echo "Install complete!"
+echo ""
+echo "Run /opt/ordig/start.sh"
+echo ""
