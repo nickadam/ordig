@@ -13,7 +13,7 @@ services:
       WG_NAMESPACE: {{WG_NAMESPACE}}
       WG_NAMESERVER: {{WG_NAMESERVER}}
       WG_PORT: {{WG_PORT}}
-      WG_ENDPOINT: {{docker-compose-dev.yml}}
+      WG_ENDPOINT: {{WG_ENDPOINT}}
       WG_SERVER_API_KEY: {{WG_SERVER_API_KEY}}
       WG_CLIENT_API_KEY: {{WG_CLIENT_API_KEY}}
     ports:
