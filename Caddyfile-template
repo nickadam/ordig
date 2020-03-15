@@ -1,4 +1,5 @@
-https://{{WG_ENDPOINT}}
+{{WG_ENDPOINT}}
 
-root /www/
 reverse_proxy /api/* api:9000
+root * /var/www/html/
+file_server
