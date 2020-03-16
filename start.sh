@@ -16,6 +16,8 @@ done
 
 nohup ./wg_server.sh >/dev/null &
 
+sleep 2
+
 wg show
 
 echo ""
