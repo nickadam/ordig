@@ -73,18 +73,29 @@ $Config = (Get-Content $ConfigFile) | ConvertFrom-Json
 $ServiceName = ("WireGuardTunnel`$" + $Config.name)
 
 while($True){
+  # make sure we can reach the on-prem DNS server
   if(& nslookup -timeout=1 -retry=1 $Config.Namespace $Config.NameServer | where {$_ -like "*timed out*"}){
     # VPN running
     if((Get-Service $ServiceName).Status -eq "Running"){
-      # Stop it and remove DNS rule
+      # Stop it
       Stop-Service $ServiceName
-      Get-DnsClientNrptRule | Remove-DnsClientNrptRule -Force
     }else{ # Not running
-      # Start it and add DNS rule
+      # Start it
       Start-Service $ServiceName
-      Add-DnsClientNrptRule -Namespace ('.' + $Config.namespace) -NameServers $Config.nameserver
     }
   }
+
+  # make sure DNS config is there if the VPN is running
+  if(((Get-Service $ServiceName).Status -eq "Running") -and ((Get-DnsClientNrptRule | Measure).Count -eq 0)){
+    Add-DnsClientNrptRule -Namespace ('.' + $Config.namespace) -NameServers $Config.nameserver
+  }
+
+  # turn off DNS otherwise
+  if(((Get-Service $ServiceName).Status -ne "Running") -and ((Get-DnsClientNrptRule | Measure).Count -gt 0)){
+    Get-DnsClientNrptRule | Remove-DnsClientNrptRule -Force
+  }
+
+  # Wait a bit
   Start-Sleep 15
 }
 '@
