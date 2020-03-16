@@ -40,10 +40,12 @@ After completing all these prompts the installation will occur and you will be p
 sudo /opt/ordig/start.sh
 ```
 
-Copy `/opt/ordig/wg1.ps1` to your clients and run as administrator. This script contains a share client API key. 
+Copy `/opt/ordig/wg1.ps1` to your clients and run as administrator. This script contains a shared client API key. 
 
 WARNING: Anyone that has access to this script will have access to your network.
 
 This script will install wireguard, and a monitoring service. The monitoring service will continually check that the client has access to query your internal DNS server. If it's not available it will toggle the client's VPN up or down.
+
+Access to the API is secured via Let's Encrypt and Caddy!
 
 Enjoy!
