@@ -16,6 +16,8 @@ done
 
 nohup ./wg_server.sh >/dev/null &
 
+wg show
+
 echo ""
 echo ""
 echo "Server started!"
