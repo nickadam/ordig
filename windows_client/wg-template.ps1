@@ -33,8 +33,8 @@ $config_key = (Get-Content ($FolderPath + "\config_key")).toString()
 
 # check if wg is installed
 if(-not (Test-Path "C:\Program Files\WireGuard\wireguard.exe")){
-  (New-Object System.Net.WebClient).DownloadFile("https://{{WG_ENDPOINT}}/public/wireguard-amd64-0.0.38.msi", ($FolderPath + "\wireguard-amd64-0.0.38.msi"))
-  & ($FolderPath + "\wireguard-amd64-0.0.38.msi") /quiet /qn /log ($FolderPath + "\wireguard-amd64-0.0.38.log")
+  (New-Object System.Net.WebClient).DownloadFile("https://{{WG_ENDPOINT}}/public/wireguard-amd64-0.1.1.msi", ($FolderPath + "\wireguard-amd64-0.1.1.msi"))
+  & ($FolderPath + "\wireguard-amd64-0.1.1.msi") /quiet /qn /log ($FolderPath + "\wireguard-amd64-0.1.1.log")
   Start-Sleep 30
 }
 
