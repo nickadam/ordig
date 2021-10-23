@@ -85,6 +85,13 @@ $Config = (Get-Content $ConfigFile) | ConvertFrom-Json
 $ServiceName = ("WireGuardTunnel`$" + $Config.name)
 
 while($True){
+  # if the tunnel is disabled clean up dns and stop
+  if((Get-Service $ServiceName).StartType -eq "Disabled"){
+    Get-DnsClientNrptRule | Remove-DnsClientNrptRule -Force
+    Stop-Service wg_watcher
+    exit
+  }
+
   # make sure we can reach the on-prem DNS server
   if(& nslookup -timeout=1 -retry=1 $Config.Namespace $Config.NameServer | where {$_ -like "*timed out*"}){
     # VPN running
