@@ -6,6 +6,21 @@ if [ "$EUID" -ne 0 ]
   exit 1
 fi
 
+# accept forwarding packets
+iptables -P FORWARD ACCEPT
+if ! grep "^net.ipv4.ip_forward=1$" /etc/sysctl.conf > /dev/null
+then
+  echo net.ipv4.ip_forward=1 >> /etc/sysctl.conf
+  sysctl -p
+fi
+
+# masq outbound interface
+dev=$(ip route get 10.0.0.0 | grep -Po "(?<=(dev ))(\S+)")
+if ! iptables -S -t nat | grep "\-o $dev \-j MASQUERADE" > /dev/null
+then
+  iptables -t nat -A POSTROUTING -o $dev -j MASQUERADE
+fi
+
 cd /opt/ordig
 
 docker-compose up -d
