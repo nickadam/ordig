@@ -3,7 +3,7 @@
 # Check if running as root
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
-  exit
+  exit 1
 fi
 
 # Prompt for environment
@@ -54,7 +54,7 @@ fi
 # Docker compose should be installed
 if ! which docker-compose >/dev/null
 then
-  curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  curl -L "https://github.com/docker/compose/releases/download/v2.0.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
   chmod +x /usr/local/bin/docker-compose
 fi
 
@@ -110,5 +110,5 @@ jinja2 Caddyfile-template config.json > Caddyfile
 echo ""
 echo "Install complete!"
 echo ""
-echo "Run /opt/ordig/start.sh"
+echo "Run sudo /opt/ordig/start.sh"
 echo ""

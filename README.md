@@ -5,7 +5,7 @@ Granting clients access to internal resources from anywhere can be a pain. Getti
 
 ## Installation
 
-All you need to get started is an Ubuntu 18.04 box on your desired network. Your server should have an internet accessible name with ports `tcp/80`, `tcp/443`, and a UDP port of your choosing for WireGuard traffic, default is `udp/51820`.
+All you need to get started is an Ubuntu 20.04 box on your desired network. Your server should have an internet accessible name with ports `tcp/80`, `tcp/443`, and a UDP port of your choosing for WireGuard traffic, default is `udp/51820`.
 
 Copy the `install.sh` script to your system and run as root.
 
@@ -40,7 +40,7 @@ After completing all these prompts the installation will occur and you will be p
 sudo /opt/ordig/start.sh
 ```
 
-Copy `/opt/ordig/wg1.ps1` to your clients and run as administrator. This script contains a shared client API key. 
+Copy `/opt/ordig/wg1.ps1` to your clients and run as administrator. This script contains a shared client API key.
 
 WARNING: Anyone that has access to this script will have access to your network.
 
