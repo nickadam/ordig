@@ -7,7 +7,7 @@ const get_device_config = require('./get_device_config')
 const get_all_device_configs = require('./get_all_device_configs')
 const YAML = require('yamljs')
 const swaggerDocument = YAML.load('./openapi.yml')
-const db = new sqlite3.Database('/data/wg.sqlite3')
+const db = new sqlite3.Database('/data/ordig.sqlite3')
 
 const wg_name = process.env.WG_NAME || 'wg0'
 const wg_pool = process.env.WG_POOL || '10.10.10.0/24'

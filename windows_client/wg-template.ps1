@@ -2,6 +2,7 @@ $WG_URL = "https://{{WG_ENDPOINT}}"
 $WG_KEY = "{{WG_CLIENT_API_KEY}}"
 $HEADER = @{"Authorization"="Bearer "+ $WG_KEY}
 $FolderPath = "C:\ProgramData\WireGuard"
+$Hash = "69A15FCFEED20AD9FCE2DC9A3B893C0606B00FA078315D5898508430F4A5DED1"
 
 Function Get-RandomKey() {
   $c = "ABCDEFGHKLMNOPRSTUVWXYZabcdefghiklmnoprstuvwxyz1234567890"
@@ -31,10 +32,21 @@ if(-not (Test-Path ($FolderPath + "\config_key"))){
 # Get the key
 $config_key = (Get-Content ($FolderPath + "\config_key")).toString()
 
+$HashCheck = $False
+# We cannot check the file hash
+if(Get-Command "Get-FileHash" -EA SilentlyContinue){
+  $HashCheck = $True
+}
+
 # check if wg is installed
 if(-not (Test-Path "C:\Program Files\WireGuard\wireguard.exe")){
-  (New-Object System.Net.WebClient).DownloadFile("https://{{WG_ENDPOINT}}/public/wireguard-amd64-0.1.1.msi", ($FolderPath + "\wireguard-amd64-0.1.1.msi"))
-  & ($FolderPath + "\wireguard-amd64-0.1.1.msi") /quiet /qn /log ($FolderPath + "\wireguard-amd64-0.1.1.log")
+  $Installer = $FolderPath + "\wireguard-amd64-0.5.msi"
+  (New-Object System.Net.WebClient).DownloadFile("https://{{WG_ENDPOINT}}/public/wireguard-amd64-0.5.msi", $Installer)
+  # Download failed, bail
+  if($HashCheck -and ((Get-FileHash -Algorithm SHA256 $Installer).Hash -ne $Hash)){
+    exit 1
+  }
+  & $Installer /quiet /qn /log ($FolderPath + "\wireguard-amd64-0.5.log")
   Start-Sleep 30
 }
 
@@ -73,6 +85,13 @@ $Config = (Get-Content $ConfigFile) | ConvertFrom-Json
 $ServiceName = ("WireGuardTunnel`$" + $Config.name)
 
 while($True){
+  # if the tunnel is disabled clean up dns and stop
+  if((Get-Service $ServiceName).StartType -eq "Disabled"){
+    Get-DnsClientNrptRule | Remove-DnsClientNrptRule -Force
+    Stop-Service wg_watcher
+    exit
+  }
+
   # make sure we can reach the on-prem DNS server
   if(& nslookup -timeout=1 -retry=1 $Config.Namespace $Config.NameServer | where {$_ -like "*timed out*"}){
     # VPN running

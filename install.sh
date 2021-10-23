@@ -3,7 +3,7 @@
 # Check if running as root
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
-  exit
+  exit 1
 fi
 
 # Prompt for environment
@@ -54,7 +54,7 @@ fi
 # Docker compose should be installed
 if ! which docker-compose >/dev/null
 then
-  curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  curl -L "https://github.com/docker/compose/releases/download/v2.0.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
   chmod +x /usr/local/bin/docker-compose
 fi
 
@@ -107,8 +107,25 @@ jinja2 server/config-template.json config.json > server/config.json
 # create Caddyfile
 jinja2 Caddyfile-template config.json > Caddyfile
 
+# create startup
+cat <<EOF > /etc/systemd/system/ordig.service
+[Unit]
+Description=ordig
+
+[Service]
+ExecStart=/opt/ordig/start.sh
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl enable ordig
+systemctl start ordig
+
 echo ""
 echo "Install complete!"
 echo ""
-echo "Run /opt/ordig/start.sh"
+echo "Server started!"
+echo ""
+echo "Copy /opt/ordig/wg.ps1 to your windows clients and run as administrator"
 echo ""
