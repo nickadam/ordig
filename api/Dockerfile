@@ -5,7 +5,7 @@ RUN echo "deb http://deb.debian.org/debian/ unstable main" > /etc/apt/sources.li
   apt-get update && \
   apt-get install -y wireguard
 
-FROM node:13
+FROM node:14
 
 LABEL maintainer="@nickadam"
 
