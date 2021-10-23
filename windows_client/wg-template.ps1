@@ -83,6 +83,7 @@ $FolderPath = "C:\ProgramData\WireGuard"
 $ConfigFile = ($FolderPath + "\dns_config.json")
 $Config = (Get-Content $ConfigFile) | ConvertFrom-Json
 $ServiceName = ("WireGuardTunnel`$" + $Config.name)
+$Endpoint = (Get-Content ($FolderPath + "\" + $Config.name + ".conf") | where {$_ -like "Endpoint*"}) -replace "Endpoint = ", "" -replace ":.*$", ""
 
 while($True){
   # if the tunnel is disabled clean up dns and stop
@@ -106,7 +107,9 @@ while($True){
 
   # make sure DNS config is there if the VPN is running
   if(((Get-Service $ServiceName).Status -eq "Running") -and ((Get-DnsClientNrptRule | Measure).Count -eq 0)){
-    Add-DnsClientNrptRule -Namespace ('.' + $Config.namespace) -NameServers $Config.nameserver
+    Add-DnsClientNrptRule -Namespace $Endpoint -NameServers 8.8.8.8 # Avoid internal DNS collisions
+    Add-DnsClientNrptRule -Namespace $Config.namespace -NameServers $Config.nameserver
+    Add-DnsClientNrptRule -Namespace ("." + $Config.namespace) -NameServers $Config.nameserver
   }
 
   # turn off DNS otherwise
