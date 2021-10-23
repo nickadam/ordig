@@ -36,11 +36,11 @@ This script will install WireGuard, docker, and all other dependencies. Follow t
 
 After completing all these prompts, the installation will occur and your server will be started.
 
-Copy `/opt/ordig/wg1.ps1` to your clients and run as administrator. This script contains a shared client API key.
+Copy `/opt/ordig/wg.ps1` to your clients and run as administrator. This script contains a shared client API key.
 
-# ⚠ WARNING ⚠
+## ⚠ WARNING ⚠
 
-### Anyone that has access to or a copy of `wg1.ps1` will have access to your network.
+### Anyone that has access to or a copy of `wg.ps1` will have access to your network.
 
 This script will install wireguard, and a monitoring service. The monitoring service will continually check that the client has access to query your internal DNS server. If it's not available it will toggle the client's VPN up or down.
 
@@ -49,5 +49,30 @@ To turn off the VPN from the client, set the WireGuardTunnel service to disabled
 The API docs are accessible at `https://{YOUR SERVER}/api/docs/`
 
 Access to the API is secured via Let's Encrypt and Caddy!
+
+## Backup & Restore
+
+There are only two files that need to be backed up:
+- `/opt/ordig/config.json`
+- `/opt/ordig/data/ordig.sqlite3`
+
+To rebuild a server - go through the install process, replace these two files, and run the following commands as root.
+```
+cd /opt/ordig
+
+# create docker-compose.yml
+jinja2 docker-compose-template.yml config.json > docker-compose.yml
+
+# create wg.ps1
+jinja2 windows_client/wg-template.ps1 config.json > wg.ps1
+
+# create server config
+jinja2 server/config-template.json config.json > server/config.json
+
+# create Caddyfile
+jinja2 Caddyfile-template config.json > Caddyfile
+
+reboot
+```
 
 Enjoy!
