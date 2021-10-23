@@ -16,10 +16,6 @@ services:
       WG_ALLOWED: {{WG_ALLOWED}}
       WG_SERVER_API_KEY: {{WG_SERVER_API_KEY}}
       WG_CLIENT_API_KEY: {{WG_CLIENT_API_KEY}}
-    ports:
-      - target: 9000
-        published: 9000
-        mode: host
     volumes:
       - type: bind
         source: /opt/ordig/data
