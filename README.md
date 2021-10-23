@@ -34,15 +34,13 @@ This script will install WireGuard, docker, and all other dependencies. Follow t
 
 `Server name [wg.example.com]: ` The name used by the API and WireGuard
 
-After completing all these prompts the installation will occur and you will be prompted to start the server.
-
-```
-sudo /opt/ordig/start.sh
-```
+After completing all these prompts, the installation will occur and your server will be started.
 
 Copy `/opt/ordig/wg1.ps1` to your clients and run as administrator. This script contains a shared client API key.
 
-WARNING: Anyone that has access to this script will have access to your network.
+# ⚠ WARNING ⚠
+
+### Anyone that has access to or a copy of `wg1.ps1` will have access to your network.
 
 This script will install wireguard, and a monitoring service. The monitoring service will continually check that the client has access to query your internal DNS server. If it's not available it will toggle the client's VPN up or down.
 
