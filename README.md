@@ -11,7 +11,8 @@ Copy the `install.sh` script to your system and run as root.
 
 ```
 curl -s -o install.sh https://raw.githubusercontent.com/nickadam/ordig/master/install.sh
-sudo sh install.sh
+chmod +x install.sh
+sudo ./install.sh
 ```
 
 This script will install WireGuard, docker, and all other dependencies. Follow the prompts to configure ordig for your environment.
