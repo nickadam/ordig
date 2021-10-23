@@ -46,6 +46,8 @@ This script will install wireguard, and a monitoring service. The monitoring ser
 
 To turn off the VPN from the client, set the WireGuardTunnel service to disabled. The accompanying WireGuardWatcherDaemon will clean up any DNS changes and stop itself.
 
+The API docs are accessible at `https://{YOUR SERVER}/api/docs/`
+
 Access to the API is secured via Let's Encrypt and Caddy!
 
 Enjoy!
