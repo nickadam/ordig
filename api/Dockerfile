@@ -19,8 +19,9 @@ COPY --from=build /usr/bin/wg /usr/bin/wg
 
 COPY ./ /home/node/app/
 
-RUN mkdir /data && \
-    chown 1000:1000 /data
+USER root
+
+RUN mkdir /data
 
 WORKDIR /home/node/app
 

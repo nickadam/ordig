@@ -107,6 +107,10 @@ jinja2 server/config-template.json config.json > server/config.json
 # create Caddyfile
 jinja2 Caddyfile-template config.json > Caddyfile
 
+# make data dirs
+mkdir /opt/ordig/caddy-data
+mkdir /opt/ordig/data
+
 # create startup
 cat <<EOF > /etc/systemd/system/ordig.service
 [Unit]
