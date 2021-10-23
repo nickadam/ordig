@@ -35,16 +35,7 @@ do
   sleep 5
 done
 
-nohup ./wg_server.sh >/dev/null &
-
-sleep 2
-
-wg show
-
-echo ""
-echo ""
-echo "Server started!"
-echo ""
-echo "Copy /opt/ordig/wg.ps1 to your windows clients and run as administrator"
-echo ""
-echo ""
+while true
+do
+  python3 daemon.py
+done

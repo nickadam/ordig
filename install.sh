@@ -107,8 +107,25 @@ jinja2 server/config-template.json config.json > server/config.json
 # create Caddyfile
 jinja2 Caddyfile-template config.json > Caddyfile
 
+# create startup
+cat <<EOF > /etc/systemd/system/ordig.service
+[Unit]
+Description=ordig
+
+[Service]
+ExecStart=/opt/ordig/start.sh
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl enable ordig
+systemctl start ordig
+
 echo ""
 echo "Install complete!"
 echo ""
-echo "Run sudo /opt/ordig/start.sh"
+echo "Server started!"
+echo ""
+echo "Copy /opt/ordig/wg.ps1 to your windows clients and run as administrator"
 echo ""
