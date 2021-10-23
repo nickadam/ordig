@@ -45,7 +45,7 @@ Copy `/opt/ordig/wg.ps1` to your clients and run as administrator. This script c
 
 This script will install wireguard, and a monitoring service. The monitoring service will continually check that the client has access to query your internal DNS server. If it's not available it will toggle the client's VPN up or down.
 
-To turn off the VPN from the client, set the WireGuardTunnel service to disabled. The accompanying WireGuardWatcherDaemon will clean up any DNS changes and stop itself.
+To turn off the VPN from the client, turn off and set the WireGuardTunnel service to disabled. The accompanying WireGuardWatcherDaemon will clean up any DNS changes and stop itself.
 
 The API docs are accessible at `https://{YOUR SERVER}/api/docs/`
 
