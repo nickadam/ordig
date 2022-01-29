@@ -2,7 +2,8 @@ $WG_URL = "https://{{WG_ENDPOINT}}"
 $WG_KEY = "{{WG_CLIENT_API_KEY}}"
 $HEADER = @{"Authorization"="Bearer "+ $WG_KEY}
 $FolderPath = "C:\ProgramData\WireGuard"
-$Hash = "0AE67041848AEFC63E4DECFD1F232FC12B74E387320B4E6E01A0880EE06B9CEE"
+$FileName = "wireguard-amd64-0.5.3.msi"
+$Hash = "76FCEC042C5989C5B816CD32EAED1E5B1C3B998A4B1C9ECA55F299E3314EF7E4"
 
 Function Get-RandomKey() {
   $c = "ABCDEFGHKLMNOPRSTUVWXYZabcdefghiklmnoprstuvwxyz1234567890"
@@ -40,13 +41,14 @@ if(Get-Command "Get-FileHash" -EA SilentlyContinue){
 
 # check if wg is installed
 if(-not (Test-Path "C:\Program Files\WireGuard\wireguard.exe")){
-  $Installer = $FolderPath + "\wireguard-amd64-0.5.2.msi"
-  (New-Object System.Net.WebClient).DownloadFile("https://{{WG_ENDPOINT}}/public/wireguard-amd64-0.5.2.msi", $Installer)
+  $Installer = $FolderPath + "\" + $FileName
+  $Url = "https://{{WG_ENDPOINT}}/public/" + $FileName
+  (New-Object System.Net.WebClient).DownloadFile($Url, $Installer)
   # Download failed, bail
   if($HashCheck -and ((Get-FileHash -Algorithm SHA256 $Installer).Hash -ne $Hash)){
     exit 1
   }
-  & $Installer /quiet /qn /log ($FolderPath + "\wireguard-amd64-0.5.2.log")
+  & $Installer /quiet /qn /log ($FolderPath + "\" + $FileName + ".log")
   Start-Sleep 30
 }
 
